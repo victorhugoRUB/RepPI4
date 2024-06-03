@@ -7,7 +7,7 @@ const host = 'localhost';
 const port = 3003;
 const app = express();
 
-let listaEmpresa = [];
+let listaProduto = [];
 
 
 app.use(session({
@@ -33,29 +33,25 @@ function usuarioIsAuth(req, res, next){
 }
 
 
-function cadastrarEmpresa(req, res){
-    const cnpj = req.body.cnpj;
-    const RazaoNome = req.body.RazaoNome;
+function cadastrarProduto(req, res){
+    const codBarra = req.body.codBarra;
+    const descProd = req.body.descProd;
+    const precoCusto = req.body.precoCusto;
+    const precoVenda = req.body.precoVenda;
+    const dataVal = req.body.dataVal;
+    const qnt = req.body.qnt;
     const nome = req.body.nome;
-    const cidade = req.body.cidade;
-    const endereco = req.body.endereco;
-    const estado = req.body.estado;
-    const cep = req.body.cep;
-    const email = req.body.email;
-    const telefone = req.body.telefone;
-    if(cnpj && RazaoNome && nome && cidade && endereco && estado && cep && email && telefone){
-        listaEmpresa.push({
-            cnpj: cnpj,
-            RazaoNome: RazaoNome,
-            nome: nome,
-            cidade: cidade,
-            endereco: endereco,
-            estado: estado,
-            cep: cep,
-            email: email,
-            telefone: telefone
+    if(codBarra && descProd && precoCusto && precoVenda && dataVal && qnt && nome){
+        listaProduto.push({
+            codBarra: codBarra,
+            descProd: descProd,
+            precoCusto: precoCusto,
+            precoVenda: precoVenda,
+            dataVal: dataVal,
+            qnt: qnt,
+            nome: nome
         });
-        res.redirect('/listarEmpresa');
+        res.redirect('/listarProduto');
     }else{
         res.write(`
         <!DOCTYPE html>
@@ -65,145 +61,91 @@ function cadastrarEmpresa(req, res){
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-            <title>Cadastro de Empresa</title>
+            <title>Cadastro de Produto</title>
         </head>
         <body>
             <div class="container m-5">
-                <legend>Cadastro de Empresa</legend>
-                <form method="post" action="/cadastrarEmpresa" class="row g-3 needs-validation" novalidate>
+                <legend>Cadastro de Produto</legend>
+                <form method="post" action="/cadastrarProduto" class="row g-3 needs-validation" novalidate>
                     <div class="col-md-4">
-                      <label for="cnpj" class="form-label">CNPJ</label>
-                      <input type="text" class="form-control" name="cnpj" id="cnpj" value="${cnpj}" required>`);
-        if(!cnpj){
+                      <label for="codBarra" class="form-label">Código de barras</label>
+                      <input type="text" class="form-control" name="codBarra" id="codBarra" value="${codBarra}" required>`);
+        if(!codBarra){
             res.write(`
                         <div class="alert alert-danger" role="alert">
-                            Por favor, insira um cnpj válido.
+                            Por favor, insira um código de barras válido.
                         </div>
             `);
         }
         res.write(`
                     </div>
                     <div class="col-md-4">
-                      <label for="RazaoNome" class="form-label">Razão Social/Nome</label>
-                      <input type="text" class="form-control" name="RazaoNome" id="RazaoNome" value="${RazaoNome}" required>`);
-        if(!RazaoNome){
+                      <label for="descProd" class="form-label">Descrição do Produto</label>
+                      <input type="text" class="form-control" name="descProd" id="descProd" value="${descProd}" required>`);
+        if(!descProd){
             res.write(`
                         <div class="alert alert-danger" role="alert">
-                            Por favor, insira uma Razão Social/Nome válida.
+                            Por favor, insira uma descrição válida.
                         </div>
             `);
         }
         res.write(`
                     </div>
                     <div class="col-md-4">
-                      <label for="nome" class="form-label">Nome Fantasia</label>
+                      <label for="precoCusto" class="form-label">Preço de custo</label>
+                      <input type="number" class="form-control" name="precoCusto" id="precoCusto" value="${precoCusto}" required>`);
+        if(!precoCusto){
+            res.write(`
+                        <div class="alert alert-danger" role="alert">
+                            Por favor, insira um preço de custo válido.
+                        </div>
+            `);
+        }
+        res.write(`
+                    </div>
+                    <div class="col-md-4">
+                      <label for="precoVenda" class="form-label">Preço de venda</label>
+                      <input type="number" class="form-control" name="precoVenda" id="precoVenda" value="${precoVenda}" required>`);
+        if(!precoVenda){
+            res.write(`
+                        <div class="alert alert-danger" role="alert">
+                            Por favor, insira um preço de venda válido.
+                        </div>
+            `);
+        }
+        res.write(`
+                    </div>
+                    <div class="col-md-4">
+                      <label for="dataVal" class="form-label">Data de validade</label>
+                      <input type="date" class="form-control" name="dataVal" id="dataVal" value="${dataVal}" required>`);
+        if(!dataVal){
+            res.write(`
+                        <div class="alert alert-danger" role="alert">
+                            Por favor, insira uma data de validade válida.
+                        </div>
+            `);
+        }
+        res.write(`
+                    </div>
+                    <div class="col-md-4">
+                      <label for="qnt" class="form-label">Quantidade</label>
+                      <input type="number" class="form-control" name="qnt" id="qnt" value="${qnt}" required>`);
+        if(!qnt){
+            res.write(`
+                        <div class="alert alert-danger" role="alert">
+                            Por favor, insira uma quantidade válida.
+                        </div>
+            `);
+        }
+        res.write(`
+                    </div>
+                    <div class="col-md-4">
+                      <label for="nome" class="form-label">Nome</label>
                       <input type="text" class="form-control" name="nome" id="nome" value="${nome}" required>`);
         if(!nome){
             res.write(`
                         <div class="alert alert-danger" role="alert">
-                            Por favor, insira um Nome Fantasia válido.
-                        </div>
-            `);
-        }
-        res.write(`
-                    </div>
-                    <div class="col-md-4">
-                      <label for="cidade" class="form-label">Cidade</label>
-                      <input type="text" class="form-control" name="cidade" id="cidade" value="${cidade}" required>`);
-        if(!cidade){
-            res.write(`
-                        <div class="alert alert-danger" role="alert">
-                            Por favor, insira uma cidade válida.
-                        </div>
-            `);
-        }
-        res.write(`
-                    </div>
-                    <div class="col-md-4">
-                      <label for="endereco" class="form-label">Endereço</label>
-                      <input type="text" class="form-control" name="endereco" id="endereco" value="${endereco}" required>`);
-        if(!endereco){
-            res.write(`
-                        <div class="alert alert-danger" role="alert">
-                            Por favor, insira um endereço válido.
-                        </div>
-            `);
-        }
-        res.write(`
-                    </div>
-                    <div class="col-md-6">
-                        <label for="estado" class="form-label">Estado</label>
-                        <select class="form-select" id="estado" name="estado" required>
-                            <option selected disabled value="">Escolha...</option>
-                            <option value="AC">Acre</option>
-                            <option value="AL">Alagoas</option>
-                            <option value="AP">Amapá</option>
-                            <option value="AM">Amazonas</option>
-                            <option value="BA">Bahia</option>
-                            <option value="CE">Ceará</option>
-                            <option value="DF">Distrito Federal</option>
-                            <option value="ES">Espírito Santo</option>
-                            <option value="GO">Goiás</option>
-                            <option value="MA">Maranhão</option>
-                            <option value="MT">Mato Grosso</option>
-                            <option value="MS">Mato Grosso do Sul</option>
-                            <option value="MG">Minas Gerais</option>
-                            <option value="PA">Pará</option>
-                            <option value="PB">Paraíba</option>
-                            <option value="PR">Paraná</option>
-                            <option value="PE">Pernambuco</option>
-                            <option value="PI">Piauí</option>
-                            <option value="RJ">Rio de Janeiro</option>
-                            <option value="RN">Rio Grande do Norte</option>
-                            <option value="RS">Rio Grande do Sul</option>
-                            <option value="RO">Rondônia</option>
-                            <option value="RR">Roraima</option>
-                            <option value="SC">Santa Catarina</option>
-                            <option value="SP">São Paulo</option>
-                            <option value="SE">Sergipe</option>
-                            <option value="TO">Tocantins</option>
-                        </select>
-        `)
-        if(!estado){
-            res.write(`
-                        <div class="alert alert-danger" role="alert">
-                            Por favor, selecione um estado.
-                        </div>
-            `);
-        }
-        res.write(`
-                    </div>
-                    <div class="col-md-4">
-                      <label for="cep" class="form-label">CEP</label>
-                      <input type="text" class="form-control" name="cep" id="cep" value="${cep}" required>`);
-        if(!cep){
-            res.write(`
-                        <div class="alert alert-danger" role="alert">
-                            Por favor, insira um CEP válido.
-                        </div>
-            `);
-        }
-        res.write(`
-                    </div>
-                    <div class="col-md-4">
-                      <label for="email" class="form-label">Email</label>
-                      <input type="email" class="form-control" name="email" id="email" value="${email}" required>`);
-        if(!email){
-            res.write(`
-                        <div class="alert alert-danger" role="alert">
-                            Por favor, insira um email válido.
-                        </div>
-            `);
-        }
-        res.write(`
-                    </div>
-                    <div class="col-md-4">
-                      <label for="telefone" class="form-label">Telefone</label>
-                      <input type="text" class="form-control" name="telefone" id="telefone" value="${telefone}" required>`);
-        if(!telefone){
-            res.write(`
-                        <div class="alert alert-danger" role="alert">
-                            Por favor, insira um telefone válido.
+                            Por favor, insira um nome válido.
                         </div>
             `);
         }
@@ -214,9 +156,10 @@ function cadastrarEmpresa(req, res){
                     </div>
                 </form>
             </div>
-        </body>
-        </html>
-        `)
+            </body>
+            </html>
+            `)
+        
         res.end();
     }
 }
@@ -255,54 +198,50 @@ app.use(express.static(path.join(process.cwd(), 'public')));
 
 app.use(usuarioIsAuth, express.static(path.join(process.cwd(), 'private')));
 
-app.post('/cadastrarEmpresa', usuarioIsAuth, cadastrarEmpresa)
+app.post('/cadastrarProduto', usuarioIsAuth, cadastrarProduto)
 
-app.get('/listarEmpresa', usuarioIsAuth, (req, res) => {
+app.get('/listarProduto', usuarioIsAuth, (req, res) => {
     res.write(`
     <html>
     <head>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <title>Lista de Empresa</title>
+        <title>Lista de Produto</title>
     </head>
     <body>
-        <h1>Lista de Empresa</h1>
+        <h1>Lista de Produto</h1>
         <table class="table">
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">CNPJ</th>
-                <th scope="col">Razão Social/Nome</th>
-                <th scope="col">Nome Fantasia</th>
-                <th scope="col">Cidade</th>
-                <th scope="col">Endereço</th>
-                <th scope="col">Estado</th>
-                <th scope="col">CEP</th>
-                <th scope="col">Email</th>
-                <th scope="col">Telefone</th>
+                <th scope="col">Codigo de barras</th>
+                <th scope="col">Descricao do Produto</th>
+                <th scope="col">Preco de custo</th>
+                <th scope="col">Preco de venda</th>
+                <th scope="col">Data de validade</th>
+                <th scope="col">Qnt em estoque</th>
+                <th scope="col">Nome do fabricante</th>
             </tr>
         </thead>
         <tbody>
-            ${listaEmpresa.map((item, index) => {
+            ${listaProduto.map((item, index) => {
                 return `
                 <tr>
                     <td>${index + 1}</td>
-                    <td>${item.cnpj}</td>
-                    <td>${item.RazaoNome}</td>
+                    <td>${item.codBarra}</td>
+                    <td>${item.descProd}</td>
+                    <td>${item.precoCusto}</td>
+                    <td>${item.precoVenda}</td>
+                    <td>${item.dataVal}</td>
+                    <td>${item.qnt}</td>
                     <td>${item.nome}</td>
-                    <td>${item.cidade}</td>
-                    <td>${item.endereco}</td>
-                    <td>${item.estado}</td>
-                    <td>${item.cep}</td>
-                    <td>${item.email}</td>
-                    <td>${item.telefone}</td>                    
                 </tr>
                 `
             })}
         </tbody>
         </table>
         <a href="/index.html">Voltar</a>
-        <a href="./cadastroEmpresa.html">Cadastrar</a>
+        <a href="./cadastroProduto.html">Cadastrar</a>
         <p>Ultimo acesso: ${req.cookies.lastAcessData}</p>
     </body>
     </html>
